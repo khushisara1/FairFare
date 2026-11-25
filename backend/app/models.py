@@ -18,6 +18,22 @@ class SplitMode(str, Enum):
     CUSTOM = "custom"
 
 
+class User(Base):
+    """Authenticated user linked optionally to trip member slots."""
+
+    __tablename__ = "user"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    name: Mapped[str] = mapped_column(String(120))
+    avatar_url: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
+    )
+
+    memberships: Mapped[list["Member"]] = relationship(back_populates="user")
+
+
 class Trip(Base):
     """A group trip containing members and shared expenses."""
 
@@ -47,12 +63,16 @@ class Member(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     trip_id: Mapped[int] = mapped_column(ForeignKey("trip.id", ondelete="CASCADE"), index=True)
+    user_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("user.id", ondelete="SET NULL"), nullable=True, index=True
+    )
     name: Mapped[str] = mapped_column(String(80))
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
     )
 
     trip: Mapped["Trip"] = relationship(back_populates="members")
+    user: Mapped[Optional["User"]] = relationship(back_populates="memberships")
     paid_expenses: Mapped[list["Expense"]] = relationship(back_populates="payer")
     splits: Mapped[list["ExpenseSplit"]] = relationship(back_populates="member")
 

@@ -4,7 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Plus, Receipt, Users } from "lucide-react";
 import { CreateTripModal } from "@/components/CreateTripModal";
-import { Header } from "@/components/Header";
+import { Navbar } from "@/components/Navbar";
+import { PersonalTrendsCard } from "@/components/PersonalTrendsCard";
 import { TripListSkeleton } from "@/components/Skeletons";
 import { api, ApiError } from "@/lib/api";
 import { formatCents } from "@/lib/format";
@@ -26,7 +27,7 @@ export default function HomePage() {
       setError(
         err instanceof ApiError
           ? err.message
-          : "Unable to reach the RED – Trip Splitter API. Ensure FastAPI is running on port 8000."
+          : "Unable to reach the FairFare – Trip Splitter API. Ensure FastAPI is running on port 8000."
       );
     } finally {
       setLoading(false);
@@ -48,7 +49,7 @@ export default function HomePage() {
           setError(
             err instanceof ApiError
               ? err.message
-              : "Unable to reach the RED – Trip Splitter API. Ensure FastAPI is running on port 8000."
+              : "Unable to reach the FairFare – Trip Splitter API. Ensure FastAPI is running on port 8000."
           );
         }
       })
@@ -65,7 +66,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-alabaster">
-      <Header />
+      <Navbar />
 
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8">
         {loading ? (
@@ -113,6 +114,9 @@ export default function HomePage() {
                 <span>New Trip</span>
               </button>
             </section>
+
+            {/* Personal Spending Trends Bento Card */}
+            <PersonalTrendsCard />
 
             {/* Bento Trip Grid */}
             <section aria-labelledby="trips-grid-heading" className="space-y-4">

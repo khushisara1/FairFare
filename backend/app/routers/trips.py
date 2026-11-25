@@ -141,7 +141,13 @@ def get_trip_detail(trip_id: int, session: Session = Depends(get_session)) -> Tr
             total_spend_cents=insights.total_spend_cents,
         ),
         members=[
-            MemberRead(id=m.id, trip_id=m.trip_id, name=m.name, created_at=m.created_at)
+            MemberRead(
+                id=m.id,
+                trip_id=m.trip_id,
+                user_id=m.user_id,
+                name=m.name,
+                created_at=m.created_at,
+            )
             for m in members
         ],
         expenses=[_serialize_expense(exp, member_names) for exp in expenses],
@@ -150,6 +156,14 @@ def get_trip_detail(trip_id: int, session: Session = Depends(get_session)) -> Tr
         insights=insights,
         zero_sum_verified=(sum(b.net_balance_cents for b in balances) == 0),
     )
+
+
+@router.delete("/{trip_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_trip(trip_id: int, session: Session = Depends(get_session)) -> None:
+    """Delete a trip and cascade-delete all associated members, expenses, and splits."""
+    trip = _get_trip_or_404(session, trip_id)
+    session.delete(trip)
+    session.commit()
 
 
 @router.post("/{trip_id}/members", response_model=MemberRead, status_code=status.HTTP_201_CREATED)
@@ -169,7 +183,13 @@ def add_member(
             detail=f"Member '{member.name}' already exists in this trip.",
         ) from exc
     session.refresh(member)
-    return MemberRead(id=member.id, trip_id=member.trip_id, name=member.name, created_at=member.created_at)
+    return MemberRead(
+        id=member.id,
+        trip_id=member.trip_id,
+        user_id=member.user_id,
+        name=member.name,
+        created_at=member.created_at,
+    )
 
 
 @router.post("/{trip_id}/expenses", response_model=ExpenseRead, status_code=status.HTTP_201_CREATED)

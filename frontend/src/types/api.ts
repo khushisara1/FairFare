@@ -28,8 +28,25 @@ export interface MemberCreate {
 export interface MemberRead {
   id: number;
   trip_id: number;
+  user_id?: number | null;
   name: string;
   created_at: string;
+}
+
+export interface UserRead {
+  id: number;
+  email: string;
+  name: string;
+  avatar_url?: string | null;
+  created_at: string;
+}
+
+export interface UserSummaryResponse {
+  total_paid_cents: number;
+  total_share_cents: number;
+  net_balance_change_cents: number;
+  trip_count: number;
+  currency: string;
 }
 
 export interface CustomSplitInput {

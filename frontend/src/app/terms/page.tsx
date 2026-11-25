@@ -1,17 +1,17 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Header } from "@/components/Header";
+import { Navbar } from "@/components/Navbar";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions – RED Trip Splitter",
+  title: "Terms & Conditions – FairFare Trip Splitter",
   description:
-    "Usage terms for RED Trip Splitter: a demonstration settlement engine using integer-cent math and strictly synthetic data.",
+    "Usage terms for FairFare Trip Splitter: a demonstration settlement engine using integer-cent math and strictly synthetic data.",
 };
 
 export default function TermsPage() {
   return (
     <div className="min-h-screen flex flex-col bg-alabaster">
-      <Header />
+      <Navbar />
       <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-10">
         <nav aria-label="Breadcrumb" className="mb-6">
           <ol className="flex items-center gap-2 text-xs text-taupe">
@@ -38,7 +38,7 @@ export default function TermsPage() {
           {[
             {
               heading: "1. Demonstration Purpose",
-              body: "RED – Trip Splitter is provided as a technical demonstration of integer-cent group expense settlement. It is not a financial product, payment processor, or regulated service.",
+              body: "FairFare – Trip Splitter is provided as a technical demonstration of integer-cent group expense settlement. It is not a financial product, payment processor, or regulated service.",
             },
             {
               heading: "2. Calculation Accuracy",
@@ -50,7 +50,7 @@ export default function TermsPage() {
             },
             {
               heading: "4. No Liability",
-              body: "The creators of RED – Trip Splitter accept no liability for financial decisions made based on calculations displayed in this application. Use this tool as a reference aid only.",
+              body: "The creators of FairFare – Trip Splitter accept no liability for financial decisions made based on calculations displayed in this application. Use this tool as a reference aid only.",
             },
             {
               heading: "5. Open Source & Fair Use",

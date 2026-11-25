@@ -41,8 +41,44 @@ class MemberRead(BaseModel):
 
     id: int
     trip_id: int
+    user_id: Optional[int] = None
     name: str
     created_at: datetime
+
+
+class UserSyncRequest(BaseModel):
+    """Payload to upsert an authenticated user and link matching member slots."""
+
+    email: str = Field(min_length=3, max_length=255)
+    name: str = Field(min_length=1, max_length=120)
+    avatar_url: Optional[str] = Field(default=None, max_length=500)
+
+
+class UserRead(BaseModel):
+    """Serialized user profile."""
+
+    id: int
+    email: str
+    name: str
+    avatar_url: Optional[str] = None
+    created_at: datetime
+
+
+class UserClaimMemberRequest(BaseModel):
+    """Claim a trip member slot for the authenticated user."""
+
+    email: str = Field(min_length=3, max_length=255)
+    member_id: int
+
+
+class UserSummaryResponse(BaseModel):
+    """Integer-cent personal spending trends across a user's trips."""
+
+    total_paid_cents: int
+    total_share_cents: int
+    net_balance_change_cents: int
+    trip_count: int
+    currency: str = "USD"
 
 
 class CustomSplitInput(BaseModel):

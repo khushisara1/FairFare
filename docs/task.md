@@ -35,3 +35,13 @@
 - [x] Execute **90-Minute Gate Dry Run**: 4-person `Gate Demo Weekend` trip with equal ($100.01), subset ($40.00/2 people), and custom ($60.00 unequal) expenses — `sum(net_balances) == 0` ✓, `len(settlements) ≤ 3` ✓, Nudge generated ✓.
 - [x] Execute applicable items from post-completion checklist (`docs/ending.md`): `not-found.tsx`, `/privacy`, `/terms`, `/thank-you`, JSON-LD SoftwareApplication schema, OpenGraph metadata, sticky mobile CTA bar (`< 768px`), breadcrumbs navigation.
 - [x] Verified zero secrets exposed in frontend bundle (audit: no SECRET/KEY/TOKEN in `.env*` or source). Updated `docs/memory.md` and `docs/task.md`. Wrote 3-minute live demo pitch script (`docs/pitch.md`).
+- [x] **Delete Trip (End-to-End):** Implement `DELETE /api/trips/{trip_id}` (`204 No Content` / `404`) with full SQLite cascade (`Member`, `Expense`, `ExpenseSplit`), plus subtle Terracotta Rust (`#B84A39`) "Delete Trip" action & accessible confirmation modal on `/trips/[id]` that clears `localStorage` identity and redirects to `/`.
+
+## Phase 5: Invites, WhatsApp Nudges & Multi-Purpose Modes
+- [x] **5.1 Zero-Friction Member Invites:** Add a "Share / Invite" button in the trip header (`Copy Trip Link` & `Invite via WhatsApp`) and a "Who are you?" member pill bar persisted in `localStorage` to auto-select "Paid by" in `+ Add Expense`.
+- [x] **5.2 One-Tap WhatsApp Payment Reminders:** Add a "Send via WhatsApp" button next to Nudge on each transfer card in `SettlementsCard.tsx` (`https://wa.me/?text=...` with owed amount, recipient, and trip link).
+- [x] **5.3 Multi-Purpose Modes:** Support preset trip/group templates (Roadtrip, Flatmates, Event) and quick-currency switching.
+
+## Phase 6: Installable PWA Mobile App
+- [x] **6.1 Installable Mobile PWA Manifest:** Create `frontend/src/app/manifest.ts` (`FairFare – Trip Splitter`, `FairFare`, `standalone`, `#F8F7F4`, `#4A6B5D`, app icons) for Android/iOS home screen installation.
+- [x] **6.2 Offline & Install Prompt:** Add service worker caching for static shell and subtle install prompt banner on mobile.

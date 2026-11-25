@@ -1,16 +1,16 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Header } from "@/components/Header";
+import { Navbar } from "@/components/Navbar";
 
 export const metadata: Metadata = {
-  title: "Page Not Found – RED Trip Splitter",
+  title: "Page Not Found – FairFare Trip Splitter",
   description: "The page you are looking for does not exist. Return to the Trip Dashboard.",
 };
 
 export default function NotFound() {
   return (
     <div className="min-h-screen flex flex-col bg-alabaster">
-      <Header />
+      <Navbar />
       <main className="flex-1 flex items-center justify-center px-4 py-16">
         <div className="bg-parchment border border-hairline rounded-2xl p-8 max-w-md w-full text-center space-y-6">
           <div className="w-16 h-16 rounded-2xl bg-sage-tint flex items-center justify-center mx-auto">

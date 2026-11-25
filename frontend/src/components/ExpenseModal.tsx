@@ -11,6 +11,7 @@ interface ExpenseModalProps {
   tripId: number;
   currency: string;
   members: MemberRead[];
+  defaultPayerId?: number | null;
   onClose: () => void;
   onSaved: () => void;
 }
@@ -35,13 +36,19 @@ export function ExpenseModal({
   tripId,
   currency,
   members,
+  defaultPayerId,
   onClose,
   onSaved,
 }: ExpenseModalProps) {
   const [title, setTitle] = useState("");
   const [amountInput, setAmountInput] = useState("");
   const [category, setCategory] = useState(CATEGORIES[0]);
-  const [payerId, setPayerId] = useState<number>(members[0]?.id ?? 0);
+  const [payerId, setPayerId] = useState<number>(() => {
+    if (defaultPayerId && members.some((m) => m.id === defaultPayerId)) {
+      return defaultPayerId;
+    }
+    return members[0]?.id ?? 0;
+  });
   const [splitMode, setSplitMode] = useState<SplitMode>("equal");
   const [selectedIds, setSelectedIds] = useState<number[]>(() =>
     members.map((m) => m.id)

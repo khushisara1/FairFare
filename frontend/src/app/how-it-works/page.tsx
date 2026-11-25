@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Header } from "@/components/Header";
+import { Navbar } from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: "How It Works – Case Studies & FAQs",
   description:
-    "See how RED Trip Splitter simplifies real group trips to the minimum number of payments, with answers to common questions about splits, rounding, and privacy.",
+    "See how FairFare Trip Splitter simplifies real group trips to the minimum number of payments, with answers to common questions about splits, rounding, and privacy.",
 };
 
 const CASE_STUDIES = [
   {
     title: "Alpine Cabin Weekend — 4 People, 7 Expenses",
     summary:
-      "Alex paid the Airbnb, Blake covered groceries twice, Casey settled two restaurant bills, and Drew paid for the ski lift. Without a tool, that's up to 12 possible payments. RED reduced it to 3.",
+      "Alex paid the Airbnb, Blake covered groceries twice, Casey settled two restaurant bills, and Drew paid for the ski lift. Without a tool, that's up to 12 possible payments. FairFare reduced it to 3.",
     creditor: "Alex +$142.50",
     debtor: "Drew –$68.25",
     transfers: 3,
@@ -38,7 +38,7 @@ const CASE_STUDIES = [
 const FAQS = [
   {
     q: "How does minimum-payment simplification work?",
-    a: "RED uses a greedy debtor-to-creditor matching algorithm. After computing each person's net balance (paid minus owed), the largest debtor pays the largest creditor first, then repeats until all balances reach zero. This guarantees at most N−1 transfers for N participants — mathematically optimal.",
+    a: "FairFare uses a greedy debtor-to-creditor matching algorithm. After computing each person's net balance (paid minus owed), the largest debtor pays the largest creditor first, then repeats until all balances reach zero. This guarantees at most N−1 transfers for N participants — mathematically optimal.",
   },
   {
     q: "How are subset splits (e.g. drinks for some people) calculated?",
@@ -50,7 +50,7 @@ const FAQS = [
   },
   {
     q: "Is my data private? Are real names stored?",
-    a: "RED is a demonstration app. All pre-loaded trips use strictly synthetic, fictional data. Any trip data you create is stored only in a local SQLite database on your own machine — nothing is sent to external servers, analytics platforms, or third parties.",
+    a: "FairFare is a demonstration app. All pre-loaded trips use strictly synthetic, fictional data. Any trip data you create is stored only in a local SQLite database on your own machine — nothing is sent to external servers, analytics platforms, or third parties.",
   },
   {
     q: "How are multi-category payers tracked in Spending Insights?",
@@ -61,7 +61,7 @@ const FAQS = [
 export default function HowItWorksPage() {
   return (
     <div className="min-h-screen flex flex-col bg-alabaster">
-      <Header />
+      <Navbar />
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-10 space-y-14">
 
         {/* Breadcrumb */}
@@ -80,7 +80,7 @@ export default function HowItWorksPage() {
             Settlement in the fewest possible moves.
           </h1>
           <p className="text-sm text-taupe leading-relaxed max-w-2xl">
-            RED uses integer-cent arithmetic and a greedy matching algorithm to collapse any group
+            FairFare uses integer-cent arithmetic and a greedy matching algorithm to collapse any group
             expense ledger into at most N−1 peer-to-peer payments — always zero-sum, always exact.
           </p>
           {/* Response time promise badge */}

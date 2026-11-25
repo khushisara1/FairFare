@@ -12,8 +12,49 @@ interface CreateTripModalProps {
 }
 
 const CURRENCIES = ["USD", "EUR", "GBP", "INR", "JPY", "CAD", "AUD"];
+const QUICK_CURRENCIES = ["USD", "INR", "EUR", "GBP"];
+
+interface TripTemplate {
+  id: string;
+  label: string;
+  defaultName: string;
+  description: string;
+  currency: string;
+}
+
+const TEMPLATES: TripTemplate[] = [
+  {
+    id: "roadtrip",
+    label: "Roadtrip",
+    defaultName: "Weekend Roadtrip",
+    description: "Fuel, tolls, snacks, and cabin stays",
+    currency: "USD",
+  },
+  {
+    id: "flatmates",
+    label: "Flatmates",
+    defaultName: "Apartment Expenses",
+    description: "Rent, groceries, Wi-Fi, and utilities",
+    currency: "INR",
+  },
+  {
+    id: "event",
+    label: "Event",
+    defaultName: "Group Celebration",
+    description: "Venue, tickets, food, and shared gifts",
+    currency: "USD",
+  },
+  {
+    id: "custom",
+    label: "Custom",
+    defaultName: "",
+    description: "",
+    currency: "USD",
+  },
+];
 
 export function CreateTripModal({ open, onClose, onCreated }: CreateTripModalProps) {
+  const [templateId, setTemplateId] = useState<string>("custom");
   const [name, setName] = useState("");
   const [currency, setCurrency] = useState("USD");
   const [description, setDescription] = useState("");
@@ -21,6 +62,13 @@ export function CreateTripModal({ open, onClose, onCreated }: CreateTripModalPro
   const [error, setError] = useState<string | null>(null);
 
   if (!open) return null;
+
+  function applyTemplate(tpl: TripTemplate) {
+    setTemplateId(tpl.id);
+    if (tpl.defaultName) setName(tpl.defaultName);
+    setDescription(tpl.description);
+    setCurrency(tpl.currency);
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -71,6 +119,32 @@ export function CreateTripModal({ open, onClose, onCreated }: CreateTripModalPro
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Multi-Purpose Templates */}
+          <div>
+            <span className="block text-xs font-semibold uppercase tracking-wider text-taupe mb-2">
+              Mode / Template
+            </span>
+            <div className="grid grid-cols-4 gap-1.5">
+              {TEMPLATES.map((tpl) => {
+                const active = templateId === tpl.id;
+                return (
+                  <button
+                    key={tpl.id}
+                    type="button"
+                    onClick={() => applyTemplate(tpl)}
+                    className={`min-h-[44px] px-2 rounded-xl text-xs font-semibold border transition-colors ${
+                      active
+                        ? "bg-sage text-parchment border-sage"
+                        : "bg-alabaster text-walnut border-hairline hover:bg-sage-tint"
+                    }`}
+                  >
+                    {tpl.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           <div>
             <label htmlFor="trip-name" className="block text-sm font-medium text-walnut mb-1.5">
               Trip Name
@@ -91,6 +165,22 @@ export function CreateTripModal({ open, onClose, onCreated }: CreateTripModalPro
             <label htmlFor="trip-currency" className="block text-sm font-medium text-walnut mb-1.5">
               Currency
             </label>
+            <div className="flex items-center gap-2 mb-2">
+              {QUICK_CURRENCIES.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => setCurrency(c)}
+                  className={`min-h-[36px] px-3 rounded-lg text-xs font-semibold border transition-colors ${
+                    currency === c
+                      ? "bg-sage-tint text-sage border-sage"
+                      : "bg-alabaster text-taupe border-hairline hover:text-walnut"
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
             <select
               id="trip-currency"
               value={currency}

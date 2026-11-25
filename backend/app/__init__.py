@@ -1,1 +1,1 @@
-"""RED – Trip Splitter Backend Package."""
+"""FairFare – Trip Splitter Backend Package."""

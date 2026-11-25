@@ -1,4 +1,4 @@
-# Living Context & State Tracker: RED – Trip Splitter
+# Living Context & State Tracker: FairFare – Trip Splitter
 
 > **Purpose:** Read this file at the start of any coding or review session to immediately restore project context without scanning the entire repository.
 
@@ -32,9 +32,24 @@
   - Secrets audit: zero API keys/tokens in `.env*` or source files.
   - Final `next build --webpack` → 8 routes, 0 errors, 0 warnings.
   - Wrote `docs/pitch.md` — 3-minute live demo script with gate checklist.
+- **Delete Trip (End-to-End):**
+  - Added `DELETE /api/trips/{trip_id}` (`204 No Content` / `404`) in `backend/app/routers/trips.py`, verified full SQLite cascade across `Trip`, `Member`, `Expense`, and `ExpenseSplit` via `test_delete_trip_cascades_cleanly` (**20/20 tests passing**).
+  - Added `api.deleteTrip(tripId)` in `frontend/src/lib/api.ts`, `DeleteTripModal.tsx` (accessible dialog with `44x44px` Cancel/Confirm Delete buttons), and a subtle Terracotta Rust (`#B84A39`) "Delete Trip" footer action on `frontend/src/app/trips/[id]/page.tsx` that clears trip-scoped `localStorage` identity and redirects to `/`.
+- **Phase 5.1, 5.2 & Phase 6.1 (Invites, WhatsApp Nudges & PWA Manifest):**
+  - Added **Share / Invite** menu (`Copy Trip Link` + `Invite via WhatsApp`) and **"Who are you?"** member pill bar persisted in `localStorage` (`fairfare_identity_<id>`) on `frontend/src/app/trips/[id]/page.tsx`, auto-selecting "Paid by" in `ExpenseModal.tsx`.
+  - Added **Send via WhatsApp** (`https://wa.me/?text=...` with owed amount, recipient, and trip link) next to Nudge on each transfer card in `frontend/src/components/SettlementsCard.tsx`.
+  - Created `frontend/src/app/manifest.ts` configuring `FairFare – Trip Splitter` (`FairFare`, `standalone`, `#F8F7F4` background, `#4A6B5D` theme) for mobile home screen installation.
+- **Global Rebrand (`RED` → `FairFare`) & Upgraded Navbar:**
+  - Rebranded all references across `frontend/`, `backend/`, `docs/`, and `README.md` from `RED – Trip Splitter` to **FairFare – Trip Splitter** (short name: `FairFare`, `FF` badge, `fairfare_identity_` & `fairfare_guest_profile` localStorage keys, `fairfare_trip_splitter.db` default DB).
+  - Created `frontend/src/components/Navbar.tsx` replacing `Header.tsx` across all routes: Sage Green `FF` emblem + `FairFare | Trip Splitter` + trip breadcrumbs, `Trips` and `How It Works` links, `Install App` PWA trigger (with native `beforeinstallprompt` or 2-step iOS/Android guide popover), and a `localStorage`-backed **Guest Profile** pill (`Set Your Name` / saved name + optional UPI ID) that auto-preselects the payer in `ExpenseModal` and appends UPI payment details in `NudgeModal` & WhatsApp reminders.
+- **Phase 5.3 & 6.2 + Auth, Personal Trends & My Expenses Filter:**
+  - **Phase 5.3:** Added preset trip/group templates (`Roadtrip`, `Flatmates`, `Event`, `Custom`) and quick-currency pills (`USD`, `INR`, `EUR`, `GBP`) to `CreateTripModal.tsx`.
+  - **Phase 6.2:** Added `frontend/public/sw.js` static shell service worker and `PwaManager.tsx` (SW registration + dismissible mobile install prompt banner).
+  - **Auth (`User` + NextAuth.js):** Added `User` model & nullable `Member.user_id` with automatic SQLite migration in `backend/app/database.py`, `POST /api/users/sync`, `POST /api/users/claim-member`, and `GET /api/users/me/summary` in `backend/app/routers/users.py`. Added `next-auth` (`GoogleProvider` + `CredentialsProvider` + `"Continue as Guest"` fallback) via `frontend/src/app/api/auth/[...nextauth]/route.ts`, `AuthProvider.tsx`, `AuthModal.tsx`, and user avatar/name dropdown in `Navbar.tsx`.
+  - **Personal Trends & My Expenses Filter:** Added `PersonalTrendsCard.tsx` on `/` (3-metric Bento card: Total You Paid, Your Total Share, Net Balance Change in integer cents with `tabular-nums` & semantic `+`/`-` badges) and an `All` | `My Expenses` toggle on `ExpenseLedgerCard.tsx`.
 
 ### What Is Left
-- **Nothing.** All 4 phases complete. Run remaining cosmetic items in `docs/ending.md` (favicon asset, og:image PNG, compressed images) only when preparing for public deployment.
+- All planned Phases 1–6 and Auth/Trends/Ledger Filtering are complete.
 
 ---
 

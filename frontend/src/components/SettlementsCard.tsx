@@ -1,10 +1,12 @@
 "use client";
 
-import { ArrowRight, Check, MessageSquareText } from "lucide-react";
+import { ArrowRight, Check, MessageCircle, MessageSquareText } from "lucide-react";
 import { formatCents } from "@/lib/format";
+import { useGuestProfile } from "@/components/Navbar";
 import type { SettlementTransfer } from "@/types/api";
 
 interface SettlementsCardProps {
+  tripName: string;
   currency: string;
   settlements: SettlementTransfer[];
   memberCount: number;
@@ -12,12 +14,27 @@ interface SettlementsCardProps {
 }
 
 export function SettlementsCard({
+  tripName,
   currency,
   settlements,
   memberCount,
   onSelectNudge,
 }: SettlementsCardProps) {
+  const guestProfile = useGuestProfile();
   const maxPossible = Math.max(0, memberCount - 1);
+
+  function buildWhatsAppUrl(transfer: SettlementTransfer): string {
+    const amountStr = formatCents(transfer.amount_cents, currency);
+    const tripUrl = typeof window !== "undefined" ? window.location.href : "";
+    const upiNote =
+      guestProfile.upiId &&
+      (!guestProfile.name ||
+        transfer.to_member_name.toLowerCase().includes(guestProfile.name.toLowerCase()))
+        ? ` (UPI: ${guestProfile.upiId})`
+        : "";
+    const text = `Hey ${transfer.from_member_name}! Quick settle-up for ${tripName}: you owe ${transfer.to_member_name} ${amountStr}${upiNote}. View the breakdown here: ${tripUrl}`;
+    return `https://wa.me/?text=${encodeURIComponent(text)}`;
+  }
 
   return (
     <section
@@ -64,14 +81,27 @@ export function SettlementsCard({
                 </p>
               </div>
 
-              <button
-                type="button"
-                onClick={() => onSelectNudge(transfer)}
-                className="min-h-[44px] px-3.5 rounded-xl bg-parchment border border-hairline hover:border-sage hover:bg-sage-tint text-walnut text-xs font-semibold inline-flex items-center gap-1.5 transition-colors shrink-0"
-              >
-                <MessageSquareText className="w-4 h-4 text-sage" aria-hidden="true" />
-                <span>Nudge</span>
-              </button>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => onSelectNudge(transfer)}
+                  className="min-h-[44px] px-3.5 rounded-xl bg-parchment border border-hairline hover:border-sage hover:bg-sage-tint text-walnut text-xs font-semibold inline-flex items-center gap-1.5 transition-colors"
+                >
+                  <MessageSquareText className="w-4 h-4 text-sage" aria-hidden="true" />
+                  <span>Nudge</span>
+                </button>
+                <a
+                  href={buildWhatsAppUrl(transfer)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Send WhatsApp reminder to ${transfer.from_member_name}`}
+                  className="min-h-[44px] px-3.5 rounded-xl bg-sage text-parchment hover:opacity-95 text-xs font-semibold inline-flex items-center gap-1.5 transition-opacity"
+                >
+                  <MessageCircle className="w-4 h-4" aria-hidden="true" />
+                  <span className="hidden sm:inline">Send via WhatsApp</span>
+                  <span className="sm:hidden">WhatsApp</span>
+                </a>
+              </div>
             </li>
           ))}
         </ul>

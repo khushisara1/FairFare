@@ -10,6 +10,7 @@ interface ExpenseLedgerCardProps {
   tripId: number;
   currency: string;
   expenses: ExpenseRead[];
+  currentMemberId?: number | null;
   onDeleted: () => void;
 }
 
@@ -23,10 +24,21 @@ export function ExpenseLedgerCard({
   tripId,
   currency,
   expenses,
+  currentMemberId,
   onDeleted,
 }: ExpenseLedgerCardProps) {
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [filterMode, setFilterMode] = useState<"all" | "mine">("all");
   const [error, setError] = useState<string | null>(null);
+
+  const visibleExpenses =
+    filterMode === "mine" && currentMemberId != null
+      ? expenses.filter(
+          (exp) =>
+            exp.payer_id === currentMemberId ||
+            exp.splits.some((sp) => sp.member_id === currentMemberId)
+        )
+      : expenses;
 
   async function handleDelete(expenseId: number) {
     setDeletingId(expenseId);
@@ -46,14 +58,50 @@ export function ExpenseLedgerCard({
       aria-labelledby="ledger-heading"
       className="bg-parchment border border-hairline rounded-2xl p-6 space-y-5"
     >
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="space-y-1">
           <h2 id="ledger-heading" className="font-editorial text-lg font-bold text-walnut">
             Recent Expense Ledger
           </h2>
           <p className="text-xs text-taupe">
-            {expenses.length} {expenses.length === 1 ? "expense" : "expenses"} recorded
+            {visibleExpenses.length} {visibleExpenses.length === 1 ? "expense" : "expenses"}{" "}
+            {filterMode === "mine" && currentMemberId != null ? "involving you" : "recorded"}
           </p>
+        </div>
+
+        <div
+          role="group"
+          aria-label="Filter expenses"
+          className="inline-flex p-1 rounded-xl bg-alabaster border border-hairline"
+        >
+          <button
+            type="button"
+            onClick={() => setFilterMode("all")}
+            className={`min-h-[36px] px-3 rounded-lg text-xs font-semibold transition-colors ${
+              filterMode === "all"
+                ? "bg-sage text-parchment"
+                : "text-taupe hover:text-walnut"
+            }`}
+          >
+            All
+          </button>
+          <button
+            type="button"
+            disabled={currentMemberId == null}
+            title={
+              currentMemberId == null
+                ? "Sign in or select your name above to filter your expenses"
+                : "Show only expenses you paid or split"
+            }
+            onClick={() => setFilterMode("mine")}
+            className={`min-h-[36px] px-3 rounded-lg text-xs font-semibold transition-colors disabled:opacity-45 ${
+              filterMode === "mine"
+                ? "bg-sage text-parchment"
+                : "text-taupe hover:text-walnut"
+            }`}
+          >
+            My Expenses
+          </button>
         </div>
       </div>
 
@@ -63,16 +111,20 @@ export function ExpenseLedgerCard({
         </div>
       )}
 
-      {expenses.length === 0 ? (
+      {visibleExpenses.length === 0 ? (
         <div className="p-8 rounded-xl bg-alabaster border border-hairline text-center space-y-1">
-          <p className="text-sm font-medium text-walnut">No expenses logged yet</p>
+          <p className="text-sm font-medium text-walnut">
+            {filterMode === "mine" ? "No expenses involving you yet" : "No expenses logged yet"}
+          </p>
           <p className="text-xs text-taupe">
-            Click &ldquo;+ Add Expense&rdquo; above to log your first shared cost.
+            {filterMode === "mine"
+              ? "Switch back to All or add a new expense."
+              : "Click “+ Add Expense” above to log your first shared cost."}
           </p>
         </div>
       ) : (
         <ul className="space-y-2.5 max-h-[540px] overflow-y-auto pr-1">
-          {expenses.map((exp) => (
+          {visibleExpenses.map((exp) => (
             <li
               key={exp.id}
               className="p-3.5 rounded-xl bg-alabaster border border-hairline flex items-center justify-between gap-3"

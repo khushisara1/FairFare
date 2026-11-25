@@ -25,7 +25,7 @@
   5. How multi-category payers and trip insights are tracked.
 
 ## 3. SEO, Metadata & Structured Data
-- [x] **Unique Page Titles per Route:** `%s – RED Trip Splitter` template applied; distinct titles on `/`, `/privacy`, `/terms`, `/thank-you`, `/how-it-works`, `/trips/[id]`.
+- [x] **Unique Page Titles per Route:** `%s – FairFare Trip Splitter` template applied; distinct titles on `/`, `/privacy`, `/terms`, `/thank-you`, `/how-it-works`, `/trips/[id]`.
 - [x] **Meta Descriptions per Route:** Concise unique `description` on every route.
 - [x] **Social Share Image (`og:image`):** `og-image.svg` configured in OpenGraph and Twitter card metadata with 1200×630 dimensions.
 - [x] **Alt Text on All Images:** All decorative icons use `aria-hidden="true"`; no non-decorative raster images in use.

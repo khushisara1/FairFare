@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Check, Copy, X } from "lucide-react";
 import { api, ApiError } from "@/lib/api";
 import { formatCents } from "@/lib/format";
+import { useGuestProfile } from "@/components/Navbar";
 import type { NudgeTone, SettlementTransfer } from "@/types/api";
 
 interface NudgeModalProps {
@@ -27,6 +28,7 @@ export function NudgeModal({
   transfer,
   onClose,
 }: NudgeModalProps) {
+  const guestProfile = useGuestProfile();
   const [tone, setTone] = useState<NudgeTone>("casual");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
@@ -46,7 +48,13 @@ export function NudgeModal({
       })
       .then((res) => {
         if (!cancelled) {
-          setMessage(res.message);
+          const upiSuffix =
+            guestProfile.upiId &&
+            (!guestProfile.name ||
+              transfer.to_member_name.toLowerCase().includes(guestProfile.name.toLowerCase()))
+              ? ` (UPI: ${guestProfile.upiId})`
+              : "";
+          setMessage(`${res.message}${upiSuffix}`);
           setError(null);
         }
       })
@@ -64,7 +72,7 @@ export function NudgeModal({
     return () => {
       cancelled = true;
     };
-  }, [open, tripId, transfer, tone]);
+  }, [open, tripId, transfer, tone, guestProfile.name, guestProfile.upiId]);
 
   if (!open || !transfer) return null;
 

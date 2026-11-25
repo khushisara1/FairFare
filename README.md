@@ -1,8 +1,8 @@
-# RED – Trip Splitter (FairFare)
+# FairFare – Trip Splitter
 
 > **End the post-trip "who owes whom" fight with the absolute fewest possible peer-to-peer payments and zero social awkwardness.**
 
-RED – Trip Splitter is a full-stack group expense settlement engine and Minimalist Bento UI built with **FastAPI**, **SQLite / SQLAlchemy**, **Next.js (App Router)**, **TypeScript**, and **Tailwind CSS**.
+FairFare – Trip Splitter is a full-stack group expense settlement engine and Minimalist Bento UI built with **FastAPI**, **SQLite / SQLAlchemy**, **Next.js (App Router)**, **TypeScript**, and **Tailwind CSS**.
 
 ---
 

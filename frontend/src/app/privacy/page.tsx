@@ -1,17 +1,17 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Header } from "@/components/Header";
+import { Navbar } from "@/components/Navbar";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy – RED Trip Splitter",
+  title: "Privacy Policy – FairFare Trip Splitter",
   description:
-    "RED Trip Splitter stores no real personal data. All demo trips use strictly synthetic, fictional information. Read our data handling policy.",
+    "FairFare Trip Splitter stores no real personal data. All demo trips use strictly synthetic, fictional information. Read our data handling policy.",
 };
 
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen flex flex-col bg-alabaster">
-      <Header />
+      <Navbar />
       <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-10">
         <nav aria-label="Breadcrumb" className="mb-6">
           <ol className="flex items-center gap-2 text-xs text-taupe">
@@ -38,7 +38,7 @@ export default function PrivacyPage() {
           {[
             {
               heading: "1. No Real Personal Data",
-              body: "RED – Trip Splitter is a demonstration product. All pre-loaded trip data (names, amounts, categories) is strictly synthetic and fictional. No real personal information is collected, stored, or transmitted.",
+              body: "FairFare – Trip Splitter is a demonstration product. All pre-loaded trip data (names, amounts, categories) is strictly synthetic and fictional. No real personal information is collected, stored, or transmitted.",
             },
             {
               heading: "2. Local-First Storage",

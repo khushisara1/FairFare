@@ -1,17 +1,17 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Header } from "@/components/Header";
+import { Navbar } from "@/components/Navbar";
 import { CheckCircle2 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Thank You – RED Trip Splitter",
-  description: "Thank you for your interest in RED Trip Splitter. We'll be in touch shortly.",
+  title: "Thank You – FairFare Trip Splitter",
+  description: "Thank you for your interest in FairFare Trip Splitter. We'll be in touch shortly.",
 };
 
 export default function ThankYouPage() {
   return (
     <div className="min-h-screen flex flex-col bg-alabaster">
-      <Header />
+      <Navbar />
       <main className="flex-1 flex items-center justify-center px-4 py-16">
         <div className="bg-parchment border border-hairline rounded-2xl p-8 max-w-md w-full text-center space-y-6">
           <div className="w-16 h-16 rounded-full bg-creditor-bg flex items-center justify-center mx-auto">

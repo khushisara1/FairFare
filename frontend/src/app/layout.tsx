@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Inter, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { AuthProvider } from "@/components/AuthProvider";
+import { PwaManager } from "@/components/PwaManager";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -26,15 +29,15 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: {
-    default: "RED – Trip Splitter | Zero-Sum Group Expense Settlement",
-    template: "%s – RED Trip Splitter",
+    default: "FairFare – Trip Splitter | Zero-Sum Group Expense Settlement",
+    template: "%s – FairFare Trip Splitter",
   },
   description:
     "End the post-trip who-owes-whom debate with minimum peer-to-peer payments, clear spending insights, and low-awkwardness Nudge messages.",
   openGraph: {
     type: "website",
-    siteName: "RED – Trip Splitter",
-    title: "RED – Trip Splitter | Zero-Sum Group Expense Settlement",
+    siteName: "FairFare – Trip Splitter",
+    title: "FairFare – Trip Splitter | Zero-Sum Group Expense Settlement",
     description:
       "Integer-cent splits, greedy ≤ N-1 settlement transfers, and one-click Nudge messages. No spreadsheet chaos.",
     images: [
@@ -42,13 +45,13 @@ export const metadata: Metadata = {
         url: "/og-image.svg",
         width: 1200,
         height: 630,
-        alt: "RED Trip Splitter – group expense settlement dashboard",
+        alt: "FairFare Trip Splitter – group expense settlement dashboard",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "RED – Trip Splitter",
+    title: "FairFare – Trip Splitter",
     description:
       "Zero-sum integer-cent trip expense splitting. Minimum payments, no awkwardness.",
     images: ["/og-image.svg"],
@@ -76,7 +79,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "SoftwareApplication",
-              name: "RED – Trip Splitter",
+              name: "FairFare – Trip Splitter",
               applicationCategory: "FinanceApplication",
               description:
                 "Zero-sum group expense splitter using integer-cent arithmetic and greedy ≤ N-1 minimum-payment settlement.",
@@ -89,16 +92,19 @@ export default function RootLayout({
             }),
           }}
         />
-        {children}
+        <AuthProvider>
+          {children}
+          <PwaManager />
+        </AuthProvider>
         {/* Sticky mobile CTA bar — only visible < 768px */}
         <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-parchment border-t border-hairline px-4 py-3 safe-area-inset-bottom">
-          <a
+          <Link
             href="/"
             className="min-h-[44px] w-full flex items-center justify-center gap-2 rounded-xl bg-amber-glow hover:bg-amber-hover text-amber-ink font-semibold text-sm transition-colors"
           >
             <span aria-hidden="true">+</span>
             <span>Add Expense</span>
-          </a>
+          </Link>
         </div>
       </body>
     </html>

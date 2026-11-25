@@ -1,4 +1,4 @@
-"""FastAPI application entrypoint for RED – Trip Splitter."""
+"""FastAPI application entrypoint for FairFare – Trip Splitter."""
 
 from contextlib import asynccontextmanager
 
@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import SessionLocal, create_db_and_tables
-from app.routers import trips
+from app.routers import trips, users
 from app.seed import seed_if_empty
 
 
@@ -20,7 +20,7 @@ async def lifespan(_app: FastAPI):
 
 
 app = FastAPI(
-    title="RED – Trip Splitter API",
+    title="FairFare – Trip Splitter API",
     version="0.1.0",
     description="Zero-sum integer-cent trip expense splitting and minimum-payment settlement API.",
     lifespan=lifespan,
@@ -39,9 +39,10 @@ app.add_middleware(
 
 
 app.include_router(trips.router)
+app.include_router(users.router)
 
 
 @app.get("/health", tags=["system"])
 def health_check() -> dict[str, str]:
     """Simple healthcheck endpoint."""
-    return {"status": "ok", "service": "red-trip-splitter"}
+    return {"status": "ok", "service": "fairfare-trip-splitter"}

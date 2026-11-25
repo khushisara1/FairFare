@@ -8,6 +8,8 @@ import type {
   TripCreate,
   TripDetailResponse,
   TripRead,
+  UserRead,
+  UserSummaryResponse,
 } from "@/types/api";
 
 const API_BASE = (
@@ -66,6 +68,11 @@ export const api = {
   getTripDetail: (tripId: number) =>
     request<TripDetailResponse>(`/api/trips/${tripId}`),
 
+  deleteTrip: (tripId: number) =>
+    request<void>(`/api/trips/${tripId}`, {
+      method: "DELETE",
+    }),
+
   addMember: (tripId: number, payload: MemberCreate) =>
     request<MemberRead>(`/api/trips/${tripId}/members`, {
       method: "POST",
@@ -88,4 +95,24 @@ export const api = {
       method: "POST",
       body: JSON.stringify(payload),
     }),
+
+  syncUser: (payload: { email: string; name: string; avatar_url?: string | null }) =>
+    request<UserRead>("/api/users/sync", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+
+  claimMember: (payload: { email: string; member_id: number }) =>
+    request<MemberRead>("/api/users/claim-member", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+
+  getMySummary: (params: { email?: string; guestName?: string }) => {
+    const query = new URLSearchParams();
+    if (params.email) query.set("email", params.email);
+    if (params.guestName) query.set("guest_name", params.guestName);
+    const qs = query.toString();
+    return request<UserSummaryResponse>(`/api/users/me/summary${qs ? `?${qs}` : ""}`);
+  },
 };

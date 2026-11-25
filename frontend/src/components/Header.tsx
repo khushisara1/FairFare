@@ -20,10 +20,10 @@ export function Header({ backHref, backLabel = "All Trips", rightSlot }: HeaderP
               className="w-8 h-8 rounded-lg bg-sage text-parchment font-editorial font-bold text-sm flex items-center justify-center shrink-0"
               aria-hidden="true"
             >
-              R
+              FF
             </span>
             <span className="font-editorial font-bold text-lg tracking-tight truncate">
-              RED
+              FairFare
             </span>
             <span className="hidden sm:inline text-sm font-medium text-taupe border-l border-hairline pl-2.5">
               Trip Splitter

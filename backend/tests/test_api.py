@@ -10,15 +10,17 @@ from sqlalchemy.pool import StaticPool
 
 from app.database import Base
 from app.main import health_check
-from app.models import SplitMode
+from app.models import Expense, ExpenseSplit, Member, SplitMode, Trip
 from app.routers.trips import (
     add_expense,
     add_member,
     create_nudge,
     create_trip,
     delete_expense,
+    delete_trip,
     get_trip_detail,
 )
+from app.routers.users import get_my_summary, sync_user
 from app.schemas import (
     CustomSplitInput,
     ExpenseCreate,
@@ -26,6 +28,7 @@ from app.schemas import (
     NudgeRequest,
     NudgeTone,
     TripCreate,
+    UserSyncRequest,
 )
 
 
@@ -55,7 +58,7 @@ def isolated_session():
 def test_health_endpoint():
     res = health_check()
     assert res["status"] == "ok"
-    assert res["service"] == "red-trip-splitter"
+    assert res["service"] == "fairfare-trip-splitter"
 
 
 def test_90_minute_gate_4_people_3_expenses():
@@ -171,3 +174,70 @@ def test_90_minute_gate_4_people_3_expenses():
         after_del = get_trip_detail(trip_id, session=session)
         assert after_del.insights.total_spend_cents == 14001
         assert sum(b.net_balance_cents for b in after_del.balances) == 0
+
+
+def test_delete_trip_cascades_cleanly():
+    with isolated_session() as session:
+        trip = create_trip(
+            TripCreate(name="Temp Trip", currency="USD", description="Cascade test"),
+            session=session,
+        )
+        m1 = add_member(trip.id, MemberCreate(name="Sam"), session=session)
+        m2 = add_member(trip.id, MemberCreate(name="Pat"), session=session)
+        add_expense(
+            trip.id,
+            ExpenseCreate(
+                title="Lunch",
+                amount_cents=2000,
+                category="Food",
+                payer_id=m1.id,
+                split_mode=SplitMode.EQUAL,
+            ),
+            session=session,
+        )
+
+        # Delete trip and verify 204-style None return + complete cascade
+        delete_trip(trip.id, session=session)
+
+        assert session.get(Trip, trip.id) is None
+        assert session.query(Member).filter(Member.trip_id == trip.id).count() == 0
+        assert session.query(Expense).filter(Expense.trip_id == trip.id).count() == 0
+        assert session.query(ExpenseSplit).count() == 0
+
+        # Deleting a non-existent trip must raise 404
+        with pytest.raises(HTTPException) as exc_info:
+            delete_trip(trip.id, session=session)
+        assert exc_info.value.status_code == 404
+
+
+def test_user_sync_and_summary():
+    with isolated_session() as session:
+        trip = create_trip(
+            TripCreate(name="Summary Trip", currency="USD", description="Summary test"),
+            session=session,
+        )
+        m1 = add_member(trip.id, MemberCreate(name="Alex"), session=session)
+        m2 = add_member(trip.id, MemberCreate(name="Blake"), session=session)
+        add_expense(
+            trip.id,
+            ExpenseCreate(
+                title="Dinner",
+                amount_cents=3000,
+                category="Food",
+                payer_id=m1.id,
+                split_mode=SplitMode.EQUAL,
+            ),
+            session=session,
+        )
+
+        user = sync_user(
+            UserSyncRequest(email="alex@example.com", name="Alex"),
+            session=session,
+        )
+        assert user.email == "alex@example.com"
+
+        summary = get_my_summary(email="alex@example.com", session=session)
+        assert summary.total_paid_cents == 3000
+        assert summary.total_share_cents == 1500
+        assert summary.net_balance_change_cents == 1500
+        assert summary.trip_count == 1
