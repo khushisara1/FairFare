@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+:root {
+  --bg-alabaster: #F8F7F4;
+  --bg-parchment: #FFFFFF;
+  --bg-sage-tint: #EEF2EE;
+
+  --text-walnut: #3E2723;
+  --text-taupe: #6D5D56;
+  --brand-sage: #4A6B5D;
+
+  --cta-amber: #F59E0B;
+  --cta-amber-hover: #D97706;
+  --cta-ink: #2A1A17;
+
+  --creditor-fg: #2E5A44;
+  --creditor-bg: #E6F4EA;
+  --debtor-fg: #B4432C;
+  --debtor-bg: #FCECE9;
+  --settled-fg: #475569;
+  --settled-bg: #F1F5F9;
+  --warning-fg: #92400E;
+  --warning-bg: #FEF3C7;
+
+  --hairline: #E6E2DA;
+}
+
+@theme inline {
+  --color-alabaster: var(--bg-alabaster);
+  --color-parchment: var(--bg-parchment);
+  --color-sage-tint: var(--bg-sage-tint);
+  --color-walnut: var(--text-walnut);
+  --color-taupe: var(--text-taupe);
+  --color-sage: var(--brand-sage);
+  --color-amber-glow: var(--cta-amber);
+  --color-amber-hover: var(--cta-amber-hover);
+  --color-amber-ink: var(--cta-ink);
+  --color-hairline: var(--hairline);
+
+  --color-creditor-fg: var(--creditor-fg);
+  --color-creditor-bg: var(--creditor-bg);
+  --color-debtor-fg: var(--debtor-fg);
+  --color-debtor-bg: var(--debtor-bg);
+  --color-settled-fg: var(--settled-fg);
+  --color-settled-bg: var(--settled-bg);
+  --color-warning-fg: var(--warning-fg);
+  --color-warning-bg: var(--warning-bg);
+
+  --font-heading: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
+body {
+  background-color: var(--bg-alabaster);
+  color: var(--text-walnut);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .font-editorial {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+.tabular-currency {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Accessible 2px Sage Green focus ring */
+:focus-visible {
+  outline: 2px solid var(--brand-sage);
+  outline-offset: 2px;
+}
