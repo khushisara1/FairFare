@@ -50,6 +50,7 @@
 
 ### What Is Left
 - All planned Phases 1–6 and Auth/Trends/Ledger Filtering are complete.
+- **Google OAuth:** `NEXTAUTH_SECRET` and `NEXTAUTH_URL` are pre-configured in `frontend/.env.local`. To activate Google Sign-In, add `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` from [Google Cloud Console](https://console.cloud.google.com/apis/credentials) with redirect URI `http://localhost:3000/api/auth/callback/google`. Guest mode and email/password auth work without it.
 
 ---
 
